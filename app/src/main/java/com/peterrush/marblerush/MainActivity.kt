@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.text.SelectionContainer
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
@@ -121,8 +120,6 @@ private fun CrashReportScreen(report: String) {
     ) {
         Text("MARBLE RUSH 진단 화면", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Black)
         Text("이전 실행에서 오류가 발생했어. 아래 내용을 캡처해서 보내줘. 오류 원인을 확인해 고칠게.", color = Color(0xFFFFD166))
-        SelectionContainer {
-            Text(report, color = Color(0xFFE5E7EB), fontSize = 11.sp, modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()))
-        }
+        Text(report, color = Color(0xFFE5E7EB), fontSize = 11.sp, modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()))
     }
 }
