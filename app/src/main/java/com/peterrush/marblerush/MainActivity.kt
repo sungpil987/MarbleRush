@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.SelectionContainer
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,7 +25,12 @@ import kotlin.random.Random
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MarbleRushApp() }
+        val crashFile = java.io.File(filesDir, "last_crash.txt")
+        val previousCrash = if (crashFile.exists()) crashFile.readText() else null
+        setContent {
+            if (!previousCrash.isNullOrBlank()) CrashReportScreen(previousCrash)
+            else MarbleRushApp()
+        }
     }
 }
 
@@ -102,5 +110,19 @@ private fun MarbleRushApp() {
             Text(if (active) "경기 중단" else if (complete) "다시 레이스!" else "레이스 시작!", fontSize = 17.sp, fontWeight = FontWeight.Black)
         }
         if (complete) Text("🏆 WINNER  $winner", color = Color(0xFFFFD166), fontSize = 22.sp, fontWeight = FontWeight.Black)
+    }
+}
+
+@Composable
+private fun CrashReportScreen(report: String) {
+    Column(
+        Modifier.fillMaxSize().background(Color(0xFF090D1A)).padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("MARBLE RUSH 진단 화면", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+        Text("이전 실행에서 오류가 발생했어. 아래 내용을 캡처해서 보내줘. 오류 원인을 확인해 고칠게.", color = Color(0xFFFFD166))
+        SelectionContainer {
+            Text(report, color = Color(0xFFE5E7EB), fontSize = 11.sp, modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()))
+        }
     }
 }
